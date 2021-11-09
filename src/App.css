@@ -1,0 +1,38 @@
+.App {
+  text-align: center;
+}
+
+.react-datetimerange-picker__wrapper {
+  border-radius: 5px;
+  background: #d0f5cf;
+  padding: 5px;
+}
+
+.table-header th {
+  font-size: 12px;
+}
+
+.table-body td {
+  font-size: 12px;
+}
+
+.sortable-field {
+  background-image: url('./assets/img/bg.gif');
+  background-repeat: no-repeat;
+  background-position: center right;
+  cursor: pointer;
+}
+
+.sortable-asc-field {
+  background-image: url('./assets/img/asc.gif');
+  background-repeat: no-repeat;
+  background-position: center right;
+  cursor: pointer;
+}
+
+.sortable-desc-field {
+  background-image: url('./assets/img/desc.gif');
+  background-repeat: no-repeat;
+  background-position: center right;
+  cursor: pointer;
+}

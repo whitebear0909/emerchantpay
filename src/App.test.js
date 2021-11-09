@@ -1,0 +1,270 @@
+import {
+  filterByCondition,
+  vAmount,
+  getTransactionByDaterange,
+} from "./services/function.service";
+
+describe("test for global functions:", () => {
+  it("filtering transaction array by filter conditions.", () => {
+    const transactions = [
+      {
+        id: 1,
+        status: "approved",
+        created_at: "2017-06-16 06:30:02",
+        merchant_name: "Merchant_115",
+        terminal_name: "Terminal 1",
+        type: "SaleTransaction",
+        error_class: "",
+        error_message: "",
+        card_holder: "Manfred Man",
+        card_number: "421234...1234",
+        amount: "12000",
+        currency: "USD",
+        unique_id: "3afed9dd95ecb85bd723c7f3b0f71550",
+      },
+      {
+        id: 2,
+        status: "error",
+        created_at: "2017-06-16 13:01:32",
+        merchant_name: "Merchant_126",
+        terminal_name: "Terminal 13",
+        type: "Sale3dTransaction",
+        error_class: "Module::ConfigurationError",
+        error_message: "Selected gateway is for test use only!",
+        card_holder: "John Doe",
+        card_number: "450000...0000",
+        amount: "50",
+        currency: "USD",
+        unique_id: "4afed9dd95ecb85bd723c7f3b0f71551",
+      },
+      {
+        id: 3,
+        status: "error",
+        created_at: "2017-06-16 06:18:01",
+        merchant_name: "Merchant_126",
+        terminal_name: "Terminal 13",
+        type: "AuthorizeTransaction",
+        error_class: "Module::SystemError",
+        error_message: "Unknown system error! Please contact support!",
+        card_holder: "John Doe",
+        card_number: "450000...0000",
+        amount: "10",
+        currency: "USD",
+        unique_id: "934761d9ac4805675916c44ea5041375",
+      },
+      {
+        id: 4,
+        status: "error",
+        created_at: "2017-06-16 06:18:01",
+        merchant_name: "Merchant_107",
+        terminal_name: "Terminal 7",
+        type: "SaleTransaction",
+        error_class: "Module::RemoteError",
+        error_message: "Unknown Service error!",
+        card_holder: "Anne Doe",
+        card_number: "420012...0012",
+        amount: "23000",
+        currency: "EUR",
+        unique_id: "1709acd57f508afc04fcef581483e005",
+      },
+      {
+        id: 5,
+        status: "approved",
+        created_at: "2017-06-16 06:30:05",
+        merchant_name: "Merchant_116",
+        terminal_name: "Terminal 3",
+        type: "SaleTransaction",
+        error_class: "",
+        error_message: "",
+        card_holder: "Manfred Man",
+        card_number: "450034...0034",
+        amount: "17000",
+        currency: "USD",
+        unique_id: "abfed77d88ecb99bd723c7f3b0f71660",
+      },
+    ];
+
+    const cond = [
+      { name: "merchant_name", matchedBy: "starts with", text: "M" },
+      { name: "terminal_name", matchedBy: "ends with", text: "3" },
+    ];
+    const expectedResult = [
+      {
+        amount: "50",
+        card_holder: "John Doe",
+        card_number: "450000...0000",
+        created_at: "2017-06-16 13:01:32",
+        currency: "USD",
+        error_class: "Module::ConfigurationError",
+        error_message: "Selected gateway is for test use only!",
+        id: 2,
+        merchant_name: "Merchant_126",
+        status: "error",
+        terminal_name: "Terminal 13",
+        type: "Sale3dTransaction",
+        unique_id: "4afed9dd95ecb85bd723c7f3b0f71551",
+      },
+      {
+        amount: "10",
+        card_holder: "John Doe",
+        card_number: "450000...0000",
+        created_at: "2017-06-16 06:18:01",
+        currency: "USD",
+        error_class: "Module::SystemError",
+        error_message: "Unknown system error! Please contact support!",
+        id: 3,
+        merchant_name: "Merchant_126",
+        status: "error",
+        terminal_name: "Terminal 13",
+        type: "AuthorizeTransaction",
+        unique_id: "934761d9ac4805675916c44ea5041375",
+      },
+      {
+        amount: "17000",
+        card_holder: "Manfred Man",
+        card_number: "450034...0034",
+        created_at: "2017-06-16 06:30:05",
+        currency: "USD",
+        error_class: "",
+        error_message: "",
+        id: 5,
+        merchant_name: "Merchant_116",
+        status: "approved",
+        terminal_name: "Terminal 3",
+        type: "SaleTransaction",
+        unique_id: "abfed77d88ecb99bd723c7f3b0f71660",
+      },
+    ];
+
+    expect(filterByCondition(transactions, cond)).toEqual(expectedResult);
+  });
+
+  it("amount visualization test.", () => {
+    const amount = 50;
+    const currency = "USD";
+    const expectedResult = "0.50 USD";
+    expect(vAmount(amount, currency)).toEqual(expectedResult);
+  });
+
+  it("test for making sure specified moment being beetween a daterange", () => {
+    const transactions = [
+      {
+        id: 1,
+        status: "approved",
+        created_at: "2017-06-16 06:30:02",
+        merchant_name: "Merchant_115",
+        terminal_name: "Terminal 1",
+        type: "SaleTransaction",
+        error_class: "",
+        error_message: "",
+        card_holder: "Manfred Man",
+        card_number: "421234...1234",
+        amount: "12000",
+        currency: "USD",
+        unique_id: "3afed9dd95ecb85bd723c7f3b0f71550",
+      },
+      {
+        id: 2,
+        status: "error",
+        created_at: "2017-06-16 13:01:32",
+        merchant_name: "Merchant_126",
+        terminal_name: "Terminal 13",
+        type: "Sale3dTransaction",
+        error_class: "Module::ConfigurationError",
+        error_message: "Selected gateway is for test use only!",
+        card_holder: "John Doe",
+        card_number: "450000...0000",
+        amount: "50",
+        currency: "USD",
+        unique_id: "4afed9dd95ecb85bd723c7f3b0f71551",
+      },
+      {
+        id: 3,
+        status: "error",
+        created_at: "2017-06-16 06:18:01",
+        merchant_name: "Merchant_126",
+        terminal_name: "Terminal 13",
+        type: "AuthorizeTransaction",
+        error_class: "Module::SystemError",
+        error_message: "Unknown system error! Please contact support!",
+        card_holder: "John Doe",
+        card_number: "450000...0000",
+        amount: "10",
+        currency: "USD",
+        unique_id: "934761d9ac4805675916c44ea5041375",
+      },
+      {
+        id: 4,
+        status: "error",
+        created_at: "2017-06-16 06:18:01",
+        merchant_name: "Merchant_107",
+        terminal_name: "Terminal 7",
+        type: "SaleTransaction",
+        error_class: "Module::RemoteError",
+        error_message: "Unknown Service error!",
+        card_holder: "Anne Doe",
+        card_number: "420012...0012",
+        amount: "23000",
+        currency: "EUR",
+        unique_id: "1709acd57f508afc04fcef581483e005",
+      },
+      {
+        id: 5,
+        status: "approved",
+        created_at: "2017-06-16 06:30:05",
+        merchant_name: "Merchant_116",
+        terminal_name: "Terminal 3",
+        type: "SaleTransaction",
+        error_class: "",
+        error_message: "",
+        card_holder: "Manfred Man",
+        card_number: "450034...0034",
+        amount: "17000",
+        currency: "USD",
+        unique_id: "abfed77d88ecb99bd723c7f3b0f71660",
+      },
+    ];
+
+    const dateRange = [
+      "Thu Jun 15 2017 00:00:00 GMT+0900 (Yakutsk Standard Time)",
+      "Fri Jun 16 2017 06:19:49 GMT+0900 (Yakutsk Standard Time)",
+    ];
+
+    const expectedResult = [
+      {
+        amount: "10",
+        card_holder: "John Doe",
+        card_number: "450000...0000",
+        created_at: "2017-06-16 06:18:01",
+        currency: "USD",
+        error_class: "Module::SystemError",
+        error_message: "Unknown system error! Please contact support!",
+        id: 3,
+        merchant_name: "Merchant_126",
+        status: "error",
+        terminal_name: "Terminal 13",
+        type: "AuthorizeTransaction",
+        unique_id: "934761d9ac4805675916c44ea5041375",
+      },
+      {
+        id: 4,
+        status: "error",
+        created_at: "2017-06-16 06:18:01",
+        merchant_name: "Merchant_107",
+        terminal_name: "Terminal 7",
+        type: "SaleTransaction",
+        error_class: "Module::RemoteError",
+        error_message: "Unknown Service error!",
+        card_holder: "Anne Doe",
+        card_number: "420012...0012",
+        amount: "23000",
+        currency: "EUR",
+        unique_id: "1709acd57f508afc04fcef581483e005",
+      },
+    ];
+
+    expect(getTransactionByDaterange(transactions, dateRange)).toEqual(
+      expectedResult
+    );
+  });
+});
