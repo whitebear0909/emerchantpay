@@ -38,7 +38,7 @@ const Detail = (props) => {
                   <div><label>Amount: </label> {vAmount(transaction.amount, transaction.currency)}</div>
                 </Col>
                 <Col xs={6} className="text-start transaction-item-right">
-                  <div className="mt-1"><label>Inique id: </label> {transaction.unique_id}</div>
+                  <div className="mt-1"><label>Unique id: </label> {transaction.unique_id}</div>
                   <div className="mt-1"><label>Status: </label> {transaction.status}</div>
                   <div className="mt-1"><label>Merchant name: </label> {transaction.merchant_name}</div>
                   <div className="mt-1"><label>Terminal name: </label> {transaction.terminal_name}</div>
