@@ -110,7 +110,7 @@ export const actions = {
   }),
 };
 
-const getMusics = () => {
+const getTransactionFromJson = () => {
   return require("../data.json");
 };
 
@@ -119,7 +119,7 @@ export function* saga() {
     actionTypes.GetTransactions,
     function* getTransactionsRequested(action) {
       yield put(actions.setLoadingFlag(true));
-      const data = yield getMusics();
+      const data = yield getTransactionFromJson();
       yield put(actions.getTransactionsSuccess(data.payment_transactions));
       yield put(actions.setFilteredTransactions(data.payment_transactions));
       yield put(actions.setLoadingFlag(false));
